@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS ekalavya_users;
+CREATE DATABASE IF NOT EXISTS ekalavya_content;
+CREATE DATABASE IF NOT EXISTS ekalavya_erp;
+CREATE DATABASE IF NOT EXISTS ekalavya_notifications;

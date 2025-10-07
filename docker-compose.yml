@@ -1,0 +1,110 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - ekalavya-net
+
+  ekalavya-web:
+    build: ./project/ekalavya-web
+    container_name: ekalavya-web
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ekalavya-erp-service
+      - ekalavya-scratch-editor
+    env_file:
+      - ./env/ekalavya-web.env
+    networks:
+      - ekalavya-net
+
+  ekalavya-users-service:
+    build: ./project/ekalavya-users-service
+    container_name: ekalavya-users-service
+    restart: always
+    ports:
+      - "9001:9001"
+    env_file:
+      - ./env/ekalavya-users-service.env
+    depends_on:
+      - mysql
+    networks:
+      - ekalavya-net
+
+  ekalavya-content-service:
+    build: ./project/ekalavya-content-service
+    container_name: ekalavya-content-service
+    restart: always
+    ports:
+      - "9002:9002"
+    env_file:
+      - ./env/ekalavya-content-service.env
+    depends_on:
+      - mysql
+    networks:
+      - ekalavya-net
+
+  ekalavya-erp-service:
+    build: ./project/ekalavya-erp-service
+    container_name: ekalavya-erp-service
+    restart: always
+    ports:
+      - "9003:9003"
+    env_file:
+      - ./env/ekalavya-erp-service.env
+    depends_on:
+      - mysql
+      - ekalavya-users-service
+      - ekalavya-content-service
+      - ekalavya-notifications-service
+      - ekalavya-files-service
+    networks:
+      - ekalavya-net
+
+  ekalavya-notifications-service:
+    build: ./project/ekalavya-notifications-service
+    container_name: ekalavya-notifications-service
+    restart: always
+    ports:
+      - "9004:9004"
+    env_file:
+      - ./env/ekalavya-notifications-service.env
+    depends_on:
+      - mysql
+    networks:
+      - ekalavya-net
+
+  ekalavya-files-service:
+    build: ./project/ekalavya-files-service
+    container_name: ekalavya-files-service
+    restart: always
+    ports:
+      - "9005:9005"
+    env_file:
+      - ./env/ekalavya-files-service.env
+    depends_on:
+      - mysql
+    networks:
+      - ekalavya-net
+
+  ekalavya-scratch-editor:
+    build: ./project/ekalavya-scratch-editor
+    container_name: ekalavya-scratch-editor
+    restart: always
+    ports:
+      - "8601:80"
+    networks:
+      - ekalavya-net
+      
+networks:
+  ekalavya-net:
+    driver: bridge

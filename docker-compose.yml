@@ -14,7 +14,11 @@ services:
       - ekalavya-net
 
   ekalavya-web:
-    build: ./project/ekalavya-web
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+      args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-web
     restart: always
     ports:
@@ -22,13 +26,15 @@ services:
     depends_on:
       - ekalavya-erp-service
       - ekalavya-scratch-editor
-    env_file:
-      - ./env/ekalavya-web.env
     networks:
       - ekalavya-net
 
   ekalavya-users-service:
-    build: ./project/ekalavya-users-service
+    build: 
+      context: .
+      dockerfile: Dockerfile.users
+      args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-users-service
     restart: always
     ports:
@@ -41,7 +47,11 @@ services:
       - ekalavya-net
 
   ekalavya-content-service:
-    build: ./project/ekalavya-content-service
+    build: 
+      context: .
+      dockerfile: Dockerfile.content
+      args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-content-service
     restart: always
     ports:
@@ -54,7 +64,11 @@ services:
       - ekalavya-net
 
   ekalavya-erp-service:
-    build: ./project/ekalavya-erp-service
+    build: 
+       context: .
+       dockerfile: Dockerfile.erp
+       args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-erp-service
     restart: always
     ports:
@@ -71,7 +85,11 @@ services:
       - ekalavya-net
 
   ekalavya-notifications-service:
-    build: ./project/ekalavya-notifications-service
+    build: 
+      context: .
+      dockerfile: Dockerfile.notifications
+      args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-notifications-service
     restart: always
     ports:
@@ -84,7 +102,11 @@ services:
       - ekalavya-net
 
   ekalavya-files-service:
-    build: ./project/ekalavya-files-service
+    build: 
+      context: .
+      dockerfile: Dockerfile.files
+      args:
+        GITHUB_PAT: ${GITHUB_PAT}
     container_name: ekalavya-files-service
     restart: always
     ports:
@@ -97,7 +119,9 @@ services:
       - ekalavya-net
 
   ekalavya-scratch-editor:
-    build: ./project/ekalavya-scratch-editor
+    build: 
+      context: .
+      dockerfile: Dockerfile.scratch-editor
     container_name: ekalavya-scratch-editor
     restart: always
     ports:

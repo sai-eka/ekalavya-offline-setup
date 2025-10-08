@@ -1,0 +1,47 @@
+# ---------- Build ----------
+FROM node:20-alpine AS builder
+
+# Install git
+RUN apk add --no-cache git bash
+
+WORKDIR /app
+
+# Add GitHub credentials via ARG (PAT) for authentication
+ARG GITHUB_PAT
+ENV GIGET_AUTH=${GITHUB_PAT}
+ARG REPO=ekalavya-web
+ARG ORG=ekalavya-io
+ARG BRANCH=develop
+
+# Configure git authentication
+RUN echo "machine github.com login x-access-token password ${GITHUB_PAT}" > ~/.netrc
+
+# Clone the repo dynamically
+RUN git clone --branch ${BRANCH} https://github.com/${ORG}/${REPO}.git .
+
+# Install dependencies
+RUN npm install
+
+# Pass environment vars for Nuxt build
+ARG VITE_AZP=ekalavya-web
+ARG VITE_ERP_API_URL=http://localhost:9003
+ENV VITE_AZP=${VITE_AZP}
+ENV VITE_ERP_API_URL=${VITE_ERP_API_URL}
+
+RUN npm run build
+
+# ---------- Run ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy only built files from builder
+COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+
+# Expose frontend port
+EXPOSE 3000
+
+# Start Nuxt app
+CMD ["node", "/app/.output/server/index.mjs"]

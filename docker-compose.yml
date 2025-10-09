@@ -10,6 +10,12 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-ppassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - ekalavya-net
 
@@ -42,7 +48,8 @@ services:
     env_file:
       - ./env/ekalavya-users-service.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - ekalavya-net
 
@@ -59,7 +66,8 @@ services:
     env_file:
       - ./env/ekalavya-content-service.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - ekalavya-net
 
@@ -76,11 +84,16 @@ services:
     env_file:
       - ./env/ekalavya-erp-service.env
     depends_on:
-      - mysql
-      - ekalavya-users-service
-      - ekalavya-content-service
-      - ekalavya-notifications-service
-      - ekalavya-files-service
+      mysql:
+        condition: service_healthy
+      ekalavya-users-service:
+        condition: service_started
+      ekalavya-content-service:
+        condition: service_started
+      ekalavya-notifications-service:
+        condition: service_started
+      ekalavya-files-service:
+        condition: service_started
     networks:
       - ekalavya-net
 
@@ -97,7 +110,8 @@ services:
     env_file:
       - ./env/ekalavya-notifications-service.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - ekalavya-net
 
@@ -114,7 +128,8 @@ services:
     env_file:
       - ./env/ekalavya-files-service.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - ekalavya-net
 

@@ -5,7 +5,7 @@ RUN apk add --no-cache git bash python3 g++ make cairo-dev pango-dev jpeg-dev gi
 
 WORKDIR /app
 
-RUN git clone --branch develop https://github.com/ekalavya-io/ekalavya-scratch-editor.git .
+RUN git clone --branch feature/no-ref/ekalavya https://github.com/ekalavya-io/ekalavya-scratch-editor.git .
 
 # Install dependencies for all workspaces
 RUN npm ci --legacy-peer-deps

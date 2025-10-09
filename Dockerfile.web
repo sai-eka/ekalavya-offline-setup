@@ -25,8 +25,10 @@ RUN npm install
 # Pass environment vars for Nuxt build
 ARG VITE_AZP=ekalavya-web
 ARG VITE_ERP_API_URL=http://localhost:9003
+ARG VITE_SCRATCH_URL=http://localhost:8601
 ENV VITE_AZP=${VITE_AZP}
 ENV VITE_ERP_API_URL=${VITE_ERP_API_URL}
+ENV VITE_SCRATCH_URL=${VITE_SCRATCH_URL}
 
 RUN npm run build
 

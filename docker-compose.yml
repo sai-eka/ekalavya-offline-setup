@@ -127,6 +127,8 @@ services:
       - "9005:9005"
     env_file:
       - ./env/ekalavya-files-service.env
+    volumes:
+      - ./app-files:/app/files
     depends_on:
       mysql:
         condition: service_healthy

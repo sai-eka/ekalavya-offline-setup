@@ -2,7 +2,7 @@
 FROM node:20-alpine AS builder
 
 # Install git
-RUN apk add --no-cache git bash
+RUN apk add --no-cache git 
 
 WORKDIR /app
 
@@ -17,10 +17,10 @@ ARG BRANCH=develop
 RUN echo "machine github.com login x-access-token password ${GITHUB_PAT}" > ~/.netrc
 
 # Clone the repo dynamically
-RUN git clone --branch ${BRANCH} https://github.com/${ORG}/${REPO}.git .
+RUN git clone --depth=1 --branch ${BRANCH} https://github.com/${ORG}/${REPO}.git .
 
 # Install all dependencies
-RUN npm install
+RUN npm install 
 
 # Build the TypeScript project
 RUN npm run build
@@ -32,8 +32,7 @@ WORKDIR /app
 
 # Copy built code and node_modules from builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
 
 # Environment setup
 ENV NODE_ENV=production

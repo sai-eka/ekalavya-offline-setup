@@ -90,28 +90,8 @@ services:
         condition: service_started
       ekalavya-content-service:
         condition: service_started
-      ekalavya-notifications-service:
-        condition: service_started
       ekalavya-files-service:
         condition: service_started
-    networks:
-      - ekalavya-net
-
-  ekalavya-notifications-service:
-    build: 
-      context: .
-      dockerfile: Dockerfile.notifications
-      args:
-        GITHUB_PAT: ${GITHUB_PAT}
-    container_name: ekalavya-notifications-service
-    restart: always
-    ports:
-      - "9004:9004"
-    env_file:
-      - ./env/ekalavya-notifications-service.env
-    depends_on:
-      mysql:
-        condition: service_healthy
     networks:
       - ekalavya-net
 

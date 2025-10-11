@@ -1,3 +1,8 @@
+x-login:
+  &ghcr-login
+  command: >
+    sh -c "echo $GITHUB_PAT | docker login ghcr.io -u $GITHUB_USERNAME --password-stdin"
+
 services:
   mysql:
     image: mysql:8
@@ -20,11 +25,7 @@ services:
       - ekalavya-net
 
   ekalavya-web:
-    build:
-      context: .
-      dockerfile: Dockerfile.web
-      args:
-        GITHUB_PAT: ${GITHUB_PAT}
+    image: ghcr.io/ekalavya-io/ekalavya-web:dev
     container_name: ekalavya-web
     restart: always
     ports:
@@ -36,11 +37,7 @@ services:
       - ekalavya-net
 
   ekalavya-users-service:
-    build: 
-      context: .
-      dockerfile: Dockerfile.users
-      args:
-        GITHUB_PAT: ${GITHUB_PAT}
+    image: ghcr.io/ekalavya-io/ekalavya-users-service:dev
     container_name: ekalavya-users-service
     restart: always
     ports:
@@ -54,11 +51,7 @@ services:
       - ekalavya-net
 
   ekalavya-content-service:
-    build: 
-      context: .
-      dockerfile: Dockerfile.content
-      args:
-        GITHUB_PAT: ${GITHUB_PAT}
+    image: ghcr.io/ekalavya-io/ekalavya-content-service:dev
     container_name: ekalavya-content-service
     restart: always
     ports:
@@ -72,11 +65,7 @@ services:
       - ekalavya-net
 
   ekalavya-erp-service:
-    build: 
-       context: .
-       dockerfile: Dockerfile.erp
-       args:
-        GITHUB_PAT: ${GITHUB_PAT}
+    image: ghcr.io/ekalavya-io/ekalavya-erp-service:dev
     container_name: ekalavya-erp-service
     restart: always
     ports:
@@ -96,11 +85,7 @@ services:
       - ekalavya-net
 
   ekalavya-files-service:
-    build: 
-      context: .
-      dockerfile: Dockerfile.files
-      args:
-        GITHUB_PAT: ${GITHUB_PAT}
+    image: ghcr.io/ekalavya-io/ekalavya-files-service:dev
     container_name: ekalavya-files-service
     restart: always
     ports:
@@ -116,9 +101,7 @@ services:
       - ekalavya-net
 
   ekalavya-scratch-editor:
-    build: 
-      context: .
-      dockerfile: Dockerfile.scratch-editor
+    image: ghcr.io/ekalavya-io/ekalavya-scratch-editor:dev
     container_name: ekalavya-scratch-editor
     restart: always
     ports:

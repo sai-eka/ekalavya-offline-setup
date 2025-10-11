@@ -85,7 +85,7 @@ services:
       - ekalavya-net
 
   ekalavya-files-service:
-    image: ghcr.io/ekalavya-io/ekalavya-files-service:dev
+    image: ghcr.io/ekalavya-io/ekalavya-file-upload-service:dev
     container_name: ekalavya-files-service
     restart: always
     ports:

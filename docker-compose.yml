@@ -83,8 +83,6 @@ services:
     image: ghcr.io/ekalavya-io/ekalavya-file-upload-service:dev
     container_name: ekalavya-files-service
     restart: always
-    ports:
-      - "9005:9005"
     env_file:
       - ./env/ekalavya-files-service.env
     volumes:
@@ -101,6 +99,19 @@ services:
     restart: always
     ports:
       - "8601:80"
+    networks:
+      - ekalavya-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: ekalavya-nginx
+    restart: always
+    ports:
+      - "9005:80"  
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - ekalavya-files-service
     networks:
       - ekalavya-net
       

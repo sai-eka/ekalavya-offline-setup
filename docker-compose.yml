@@ -103,6 +103,15 @@ services:
       - "8601:80"
     networks:
       - ekalavya-net
+
+  ekalavya-appinventor-sources:
+    image: ghcr.io/ekalavya-io/ekalavya-appinventor-sources:dev
+    container_name: ekalavya-appinventor-sources
+    restart: always
+    ports:
+      - "8888:8888"
+    networks:
+      - ekalavya-net
       
 networks:
   ekalavya-net:

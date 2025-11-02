@@ -67,6 +67,8 @@ services:
       - "9003:9003"
     env_file:
       - ./env/ekalavya-erp-service.env
+    environment:
+      - HOST_TMP_DIR=/tmp
     depends_on:
       mysql:
         condition: service_healthy

@@ -1,4 +1,15 @@
 # Cross-platform GitHub Container Registry login helper for Windows PowerShell
+# Auto-elevate to Administrator if not already running as admin
+
+# --- Auto-Elevation Section ---
+$IsAdmin = ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()
+).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+if (-not $IsAdmin) {
+    Write-Host "Requesting administrative privileges..."
+    Start-Process powershell -Verb RunAs -ArgumentList "-ExecutionPolicy Bypass -File `"$PSCommandPath`""
+    exit
+}
 
 # Load .env variables
 $envPath = ".env"

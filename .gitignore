@@ -3,3 +3,8 @@
 /mysql_data
 .env
 /app-files
+
+# Watchdog Secrets
+private.pem
+license.key
+watchdog_data/

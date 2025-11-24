@@ -115,6 +115,27 @@ services:
     networks:
       - ekalavya-net
       
+  license-watchdog:
+    image: node:18-alpine
+    container_name: license-watchdog
+    restart: always
+    volumes:
+      - ./watchdog.js:/app/watchdog.js
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./license.key:/app/license.key:ro
+      - ./public.pem:/app/public.pem:ro
+      - watchdog_data:/app/data
+    environment:
+      - LICENSE_PATH=/app/license.key
+      - PUBLIC_KEY_PATH=/app/public.pem
+      - STATE_FILE_PATH=/app/data/state.json
+    command: sh -c "cd /app && node watchdog.js"
+    networks:
+      - ekalavya-net
+
 networks:
   ekalavya-net:
     driver: bridge
+
+volumes:
+  watchdog_data:
